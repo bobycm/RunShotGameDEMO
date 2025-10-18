@@ -3,7 +3,6 @@ using UnityEngine;
 public class AttackSystem : MonoBehaviour
 {
     private PlayerBulletManager bulletManager;
-    public BulletData currentBulletData;
 
     public Transform firePoint;
 
@@ -59,10 +58,18 @@ public class AttackSystem : MonoBehaviour
                 Quaternion.LookRotation(fireDirection) // 讓子彈朝向移動方向
             );
 
-            Bullet bulletScript = bulletObject.GetComponent<Bullet>();
-            if (bulletScript != null)
+            IProjectile projectile = bulletObject.GetComponent<IProjectile>();
+
+            if (projectile != null)
             {
-                bulletScript.Initialize(fireDirection, data.speed, data.lifetime);
+                // AttackSystem 只知道要呼叫 Initialize 和 SetDamage
+                // 它不需要知道子彈是怎麼移動或計算傷害的 (DIP)
+                projectile.Initialize(fireDirection, data.speed, data.lifetime);
+                projectile.SetDamage(data.damage);
+            }
+            else
+            {
+                Debug.LogError($"子彈 Prefab '{data.bulletPrefab.name}' 缺少 IProjectile！");
             }
         }
     }

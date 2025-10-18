@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4700637471052052054}
   - component: {fileID: 2704880749799290103}
   m_Layer: 0
-  m_Name: bullet
+  m_Name: bullet_Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.010056585, y: 0.91714776, z: -32.816895}
-  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: afa2746cf465e604386b814a13bc0aa7, type: 2}
+  - {fileID: 2100000, guid: a6a2d0bb7c5b4924babbf8a969c5f478, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
