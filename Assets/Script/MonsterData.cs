@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewMonsterData", menuName = "Custom/Monster Data")]
-public class MonsterData : MonoBehaviour
+public class MonsterData : ScriptableObject
 {
-    public string MonsterName = "test";
+    public string MonsterName = "";
 
     [Header("Prefab")]
     public GameObject monsterPrefab;
@@ -14,6 +14,6 @@ public class MonsterData : MonoBehaviour
     [Header("Damage")]
     public int damage = 10;
 
-    [Header("Life")]
-    public int life = 10;
+    [Header("Health")]
+    public int health = 10;
 }

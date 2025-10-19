@@ -2,27 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster : MonoBehaviour, IDamageable
+public class Monster : MonoBehaviour,IMonsterInstance
 {
-    private float speed = 2;
-    private int health = 10;
+    private float currentspeed;
     private int currentHealth;
+    public EnemyHealth EnemyHealth;
 
-    void Update()
+    private void Awake()
     {
-        transform.position -= transform.forward * speed * Time.deltaTime;
+        EnemyHealth = GetComponent<EnemyHealth>(); 
     }
-    private void Start()
-    {
-        currentHealth = health;
-    }
-    public void TakeDamage(int damageAmount)
-    {
-        currentHealth -= damageAmount;
 
-        if (currentHealth <= 0)
-        {
-            Destroy(gameObject);
-        }
+    public void Initialize(MonsterData data)
+    {
+        this.currentspeed = data.speed;
+        this.EnemyHealth.maxHealth = data.health;
+    }
+    private void Update()
+    {
+        transform.position += transform.forward * currentspeed * Time.deltaTime;
     }
 }

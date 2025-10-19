@@ -62,8 +62,6 @@ public class AttackSystem : MonoBehaviour
 
             if (projectile != null)
             {
-                // AttackSystem 只知道要呼叫 Initialize 和 SetDamage
-                // 它不需要知道子彈是怎麼移動或計算傷害的 (DIP)
                 projectile.Initialize(fireDirection, data.speed, data.lifetime);
                 projectile.SetDamage(data.damage);
             }

@@ -32,6 +32,7 @@ public class Bullet : MonoBehaviour, IProjectile
     }
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"[Bullet] ¸I¼²µo¥Í©ó: {Time.time}");
         if (other.CompareTag("Enemy"))
         {
             IDamageable damageable = other.GetComponent<IDamageable>();
