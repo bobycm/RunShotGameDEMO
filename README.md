@@ -1,7 +1,7 @@
 ### **這是RunShootGame的玩法DEMO**
-使用技術：
-1.Object Pooling降低資源使用以穩定FPS
-2.ScriptableObject實現動態成長與難度提升時不影響設定基礎值
+*使用技術：
+*1.Object Pooling降低資源使用以穩定FPS。
+*2.ScriptableObject實現動態成長與難度提升時不影響設定基礎值。
 
 ### 一、遊戲主要功能 (Main Features)
 
