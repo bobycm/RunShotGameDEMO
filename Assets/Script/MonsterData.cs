@@ -16,4 +16,7 @@ public class MonsterData : ScriptableObject
 
     [Header("Health")]
     public int health = 10;
+
+    [Header("Spawn Rate")]
+    public float spawnWeight = 10f;
 }

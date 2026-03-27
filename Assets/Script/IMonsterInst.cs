@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IMonsterInstance
 {
-    void Initialize(MonsterData data);
+    void Initialize(MonsterData data, int healthBonus = 0);
 }

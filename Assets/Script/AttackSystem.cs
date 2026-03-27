@@ -6,8 +6,6 @@ public class AttackSystem : MonoBehaviour
 
     public Transform firePoint;
 
-    private float nextFireTime = 0f;
-
     private void Start()
     {
         bulletManager = GetComponent<PlayerBulletManager>();
@@ -20,11 +18,10 @@ public class AttackSystem : MonoBehaviour
     {
         if (bulletManager != null)
         {
-            for (int i = 0; i < bulletManager.activeWeapons.Count; i++)//All bullets type
+            for (int i = 0; i < bulletManager.activeWeapons.Count; i++)
             {
                 WeaponInstance weapon = bulletManager.activeWeapons[i];
 
-                // øW•ﬂ¿À¨d®C∫ÿ™Zæπ™∫ßN´oÆ…∂°
                 if (Time.time >= weapon.nextFireTime)
                 {
                     Shoot(weapon);
@@ -44,47 +41,72 @@ public class AttackSystem : MonoBehaviour
 
         if (data.bulletPrefab == null)
         {
-            Debug.LogError($"Weapon Data '{data.BulletName}' ®S¶≥´¸©w Prefab°I");
+            Debug.LogError($"Weapon Data '{data.BulletName}' Prefab MissingÔºÅ");
             return;
         }
 
-        for (int i = 0; i < data.bulletsPerShot; i++)
-        {
-            Vector3 fireDirection = GetFireDirection(data, i);
+        int currentShootCount = data.bulletsPerShot;
+        int currentDamage = data.damage;
+        int currentPierceCount = data.pierceCount;
+        float currentexplosionRadius = data.explosionRadius;
 
-            GameObject bulletObject = Instantiate(
-                data.bulletPrefab,
-                firePoint.position,
-                Quaternion.LookRotation(fireDirection) // ≈˝§lºu¥¬¶V≤æ∞ §Ë¶V
-            );
+        switch (data.effectType)
+        {
+            case BulletEffectType.Normal:
+                currentDamage += weapon.currentBulletsLevel;
+                currentShootCount = weapon.currentBulletsLevel;
+                break;
+            case BulletEffectType.Piercing:
+                currentDamage += weapon.currentBulletsLevel;
+                currentPierceCount += weapon.currentBulletsLevel;
+                break;
+            case BulletEffectType.Explosive:
+                currentDamage += weapon.currentBulletsLevel;
+                currentexplosionRadius += weapon.currentBulletsLevel;
+                break;
+        }
+
+        for (int i = 0; i < currentShootCount; i++)
+        {
+            Vector3 fireDirection = GetFireDirection(data, i, currentShootCount);
+
+            GameObject bulletObject = ObjectPool.Instance.Get(data.bulletPrefab, firePoint.position, Quaternion.LookRotation(fireDirection));
+
+            Bullet bScript = bulletObject.GetComponent<Bullet>();
+            if (bScript != null)
+            {
+                bScript.SetPoolSource(data.bulletPrefab);
+            }
 
             IProjectile projectile = bulletObject.GetComponent<IProjectile>();
-
             if (projectile != null)
             {
-                projectile.Initialize(fireDirection, data.speed, data.lifetime);
-                projectile.SetDamage(data.damage);
+                projectile.Initialize(fireDirection, data.speed, data.lifetime, data.effectType, currentPierceCount, data.explosionRadius);
+                
+                projectile.SetDamage(currentDamage);
             }
             else
             {
-                Debug.LogError($"§lºu Prefab '{data.bulletPrefab.name}' Ø §÷ IProjectile°I");
+                Debug.LogError($"Â≠êÂΩà Prefab '{data.bulletPrefab.name}' Áº∫Â∞ë IProjectileÔºÅ");
             }
         }
     }
 
-    private Vector3 GetFireDirection(BulletData data, int shotIndex)
+    private Vector3 GetFireDirection(BulletData data, int shotIndex, int totalBullets)
     {
-        if (data.bulletsPerShot <= 1 || data.spreadAngle == 0f)
+        if (totalBullets <= 1)
         {
-            return firePoint.forward;//´DΩ∆º∆ºu™Ω±µÆg¿ª
+            return firePoint.forward;
         }
 
-        // ≠p∫‚®Cµo§lºu™∫∞æ≤æ®§´◊
-        float startAngle = -data.spreadAngle / 2f;
-        float angleStep = data.spreadAngle / (data.bulletsPerShot - 1);
-        float currentAngle = startAngle + (shotIndex * angleStep);
+        float baseStepDivisor = data.bulletsPerShot > 1 ? (data.bulletsPerShot - 1) : 1f;
+        float fixedAngleStep = data.spreadAngle / baseStepDivisor;
 
-        // ±N§Ë¶V±€¬‡
+        float dynamicTotalSpread = fixedAngleStep * (totalBullets - 1);
+
+        float startAngle = -dynamicTotalSpread / 2f;
+        float currentAngle = startAngle + (shotIndex * fixedAngleStep);
+
         Quaternion spreadRotation = Quaternion.AngleAxis(currentAngle, firePoint.up);
         return spreadRotation * firePoint.forward;
     }

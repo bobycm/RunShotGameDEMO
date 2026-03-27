@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletName: fireball
   bulletPrefab: {fileID: 2759890728288079640, guid: 2b46ab3ef71ab2246ad0be18e8f2a9d7, type: 3}
+  effectType: 2
+  explosionRadius: 3
+  pierceCount: 1
   speed: 10
   lifetime: 5
   fireRateInterval: 1.5
   bulletsPerShot: 1
   damage: 20
-  spreadAngle: 0
+  spreadAngle: 5

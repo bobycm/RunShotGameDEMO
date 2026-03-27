@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterName: noob
   monsterPrefab: {fileID: 1518040808407770166, guid: 846056100649d3949963483ca6408565, type: 3}
-  speed: 3
+  speed: 15
   damage: 10
-  health: 10
+  health: 20
+  spawnWeight: 80

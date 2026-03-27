@@ -13,10 +13,12 @@ public class Monster : MonoBehaviour,IMonsterInstance
         EnemyHealth = GetComponent<EnemyHealth>(); 
     }
 
-    public void Initialize(MonsterData data)
+    public void Initialize(MonsterData data, int healthBonus = 0)
     {
         this.currentspeed = data.speed;
-        this.EnemyHealth.maxHealth = data.health;
+        this.EnemyHealth.maxHealth = data.health + healthBonus;
+        this.EnemyHealth.ResetHealth();
+        this.EnemyHealth.SetPoolSource(data.monsterPrefab);
     }
     private void Update()
     {

@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletName: normal
   bulletPrefab: {fileID: 2759890728288079640, guid: e1208e44ff5c9504ea7577f4574534b5, type: 3}
+  effectType: 0
+  explosionRadius: 0
+  pierceCount: 1
   speed: 20
   lifetime: 5
   fireRateInterval: 1
   bulletsPerShot: 1
   damage: 10
-  spreadAngle: 0
+  spreadAngle: 5

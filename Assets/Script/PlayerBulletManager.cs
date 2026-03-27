@@ -6,18 +6,31 @@ using UnityEngine;
 public class WeaponInstance
 {
     public BulletData data;
-    // ¦U§ðÀ»¿W¥ß­p®É¾¹
+    public int currentBulletsLevel;
+    
     [HideInInspector] public float nextFireTime = 0f;
 
     public WeaponInstance(BulletData data)
     {
         this.data = data;
+        this.currentBulletsLevel = 1;
     }
 }
+
+[System.Serializable]
+public struct ItemAttributeToWeapon
+{
+    public ItemAttributeType attrType;
+    public BulletData weaponData;
+}
+
 public class PlayerBulletManager : MonoBehaviour
 {
     [Header("PlayerCurrentBullets")]
     public List<WeaponInstance> activeWeapons = new List<WeaponInstance>();
+    
+    [Header("Weapon Mappings")]
+    public ItemAttributeToWeapon[] weaponMappings;
 
     private AttackSystem attackSystem;
 
@@ -26,21 +39,57 @@ public class PlayerBulletManager : MonoBehaviour
         attackSystem = GetComponent<AttackSystem>();
         if (attackSystem == null)
         {
-            Debug.LogError("AttackSystem Missing¡I");
+            Debug.LogError("AttackSystem Missingï¼");
         }
     }
 
-    // ª±®aÀò±o·sªZ¾¹®É½Õ¥Î¦¹¨ç¦¡
+    public void ApplyWeaponUpgrade(ItemAttributeType attrType, int amount)
+    {
+        BulletData targetData = null;
+        if (weaponMappings != null)
+        {
+            foreach (var mapping in weaponMappings)
+            {
+                if (mapping.attrType == attrType)
+                {
+                    targetData = mapping.weaponData;
+                    break;
+                }
+            }
+        }
+
+        if (targetData == null) return;
+
+        WeaponInstance existingWeapon = activeWeapons.Find(w => w.data == targetData);
+
+        if (existingWeapon != null)
+        {
+            existingWeapon.currentBulletsLevel += amount;
+            
+            if (existingWeapon.currentBulletsLevel <= 0)
+            {
+                activeWeapons.Remove(existingWeapon);
+                Debug.Log($"å¤±åŽ»æ­¦å™¨: {targetData.BulletName}");
+            }
+            else
+            {
+                Debug.Log($"æ›´æ–°æ­¦å™¨ {targetData.BulletName} ç­‰ç´š + {existingWeapon.currentBulletsLevel}");
+            }
+        }
+        else
+        {
+            if (amount > 0)
+            {
+                WeaponInstance newWeapon = new WeaponInstance(targetData);
+                activeWeapons.Add(newWeapon);
+                Debug.Log($"ç²å¾—æ–°æ­¦å™¨: {targetData.BulletName} ç­‰ç´šç‚º: {amount}");
+            }
+        }
+    }
+
     public void AcquireWeapon(BulletData bulletData)
     {
-        if (activeWeapons.Exists(w => w.data == bulletData))
-        {
-            Debug.Log($"¤w¾Ö¦³ {bulletData.BulletName}¡C");
-            return;
-        }
-
+        if (activeWeapons.Exists(w => w.data == bulletData)) return;
         activeWeapons.Add(new WeaponInstance(bulletData));
-        Debug.Log($"Àò±o·sªZ¾¹: {bulletData.BulletName}");
     }
-
 }

@@ -1,6 +1,10 @@
 using UnityEngine;
-
-// 讓你可以透過右鍵菜單創建這個資料檔案
+public enum BulletEffectType
+{
+    Normal,
+    Piercing,
+    Explosive,
+}
 [CreateAssetMenu(fileName = "NewBulletData", menuName = "Custom/Bullet Data")]
 public class BulletData : ScriptableObject
 {
@@ -8,6 +12,11 @@ public class BulletData : ScriptableObject
 
     [Header("Prefab")]
     public GameObject bulletPrefab;
+
+    [Header("effect")]
+    public BulletEffectType effectType;
+    public float explosionRadius = 0f;
+    public int pierceCount = 1;
 
     [Header("Speed")]
     public float speed = 20f;
