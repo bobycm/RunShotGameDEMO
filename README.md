@@ -1,3 +1,4 @@
 這是RunShootGame的玩法DEMO
-目前功能：點擊人物拖曳移動，自動射擊，多子彈種類，怪物自動生成，子彈與怪物互動
-此DEMO嘗試使用OOD原則撰寫程式碼
+使用技術：
+1.Object Pooling降低資源使用以穩定FPS
+2.ScriptableObject實現動態成長與難度提升時不影響設定基礎值
